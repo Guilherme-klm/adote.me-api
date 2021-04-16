@@ -3,19 +3,31 @@ package com.adote.me.dtl.publication;
 import com.adote.me.dtl.animal.AnimalInputDTO;
 import com.adote.me.model.Comment;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bson.types.ObjectId;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 import java.util.List;
 
 public class PublicationInputDTO {
+
+    private ObjectId id;
 
     @JsonProperty("description")
     @NotEmpty
     private String description;
 
-    @JsonProperty("imagesBase64")
-    private List<String> imagesBase64;
+    private String imageName;
+
+    @JsonProperty("image")
+    private String image;
 
     @JsonProperty("state")
     @NotEmpty
@@ -40,13 +52,22 @@ public class PublicationInputDTO {
     @Valid
     private AnimalInputDTO animalInputDTO;
 
+    public ObjectId getId() {
+        if (id == null)
+            id = new ObjectId();
+        return id;
+    }
 
     public String getDescription() {
         return description;
     }
 
-    public List<String> getImagesBase64() {
-        return imagesBase64;
+    public String getImageName() {
+        return imageName;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public String getState() {
@@ -73,4 +94,19 @@ public class PublicationInputDTO {
         return animalInputDTO;
     }
 
+    public String convertToFile() {
+        if(image != null) {
+            var imageName = "C:\\images\\".concat(getId().toString().concat(".jpg"));
+            try {
+                byte[] decoded = Base64.getDecoder().decode(image);
+                InputStream is = new ByteArrayInputStream(decoded);
+                BufferedImage bi = ImageIO.read(is);
+                ImageIO.write(bi, "jpg", new File(imageName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return imageName;
+        }
+        return null;
+    }
 }

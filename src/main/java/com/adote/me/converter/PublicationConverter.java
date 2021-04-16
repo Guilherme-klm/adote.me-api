@@ -28,7 +28,7 @@ public class PublicationConverter extends BaseConverter {
         var publicationUserInput = publicationInputDTO.getPublicationUserInputDTO();
         var animalInput = publicationInputDTO.getAnimalInputDTO();
 
-        return new Publication(publicationInputDTO.getDescription(),publicationInputDTO.getImagesBase64(), publicationInputDTO.getState(), publicationInputDTO.getCity(), publicationInputDTO.getNeighborhood(), getCurrentDateTime(),
+        return new Publication(publicationInputDTO.getId(), publicationInputDTO.getDescription(),publicationInputDTO.convertToFile(), publicationInputDTO.getState(), publicationInputDTO.getCity(), publicationInputDTO.getNeighborhood(), getCurrentDateTime(),
                 new PublicationUser(publicationUserInput.getId(), publicationUserInput.getName()),
                 new Animal(animalInput.getName(), animalInput.getBreed(),
                         new Vaccine(animalInput.getVaccineInputDTO().getName(), animalInput.getVaccineInputDTO().getDate(), animalInput.getVaccineInputDTO().getValidity()),

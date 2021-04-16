@@ -1,24 +1,24 @@
 package com.adote.me.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import javax.persistence.Id;
 import java.util.List;
 
 @Document(collection = "publication")
 public class Publication {
 
-    @MongoId
-    @Field("id")
-    private String id;
+    @Id
+    private ObjectId id;
 
     @Field("description")
     private String description;
 
     @Field("imagesBase64")
-    private List<String> imagesBase64;
+    private String imagesBase64;
 
     @Field("state")
     private String state;
@@ -44,7 +44,8 @@ public class Publication {
     @Field("animal")
     private Animal animal;
 
-    public Publication(String description, List<String> imagesBase64, String state, String city, String neighborhood, String creationTimeDate, PublicationUser publicationUser, Animal animal) {
+    public Publication(ObjectId id, String description, String imagesBase64, String state, String city, String neighborhood, String creationTimeDate, PublicationUser publicationUser, Animal animal) {
+        this.id = id;
         this.description = description;
         this.imagesBase64 = imagesBase64;
         this.state = state;
@@ -57,7 +58,7 @@ public class Publication {
 
     public Publication () {}
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
@@ -65,7 +66,7 @@ public class Publication {
         return description;
     }
 
-    public List<String> getImagesBase64() {
+    public String getImagesBase64() {
         return imagesBase64;
     }
 

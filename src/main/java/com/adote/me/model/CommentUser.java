@@ -1,12 +1,12 @@
 package com.adote.me.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 public class CommentUser {
 
-    @MongoId
-    @Field("id")
+    @Id
     private Long id;
 
     @Field("name")
