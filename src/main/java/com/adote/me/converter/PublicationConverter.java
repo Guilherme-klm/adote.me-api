@@ -9,6 +9,9 @@ import com.adote.me.dtl.remedy.RemedyOutputDTO;
 import com.adote.me.dtl.vaccine.VaccineOutputDTO;
 import com.adote.me.model.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class PublicationConverter extends BaseConverter {
 
     private PublicationInputDTO publicationInputDTO;
@@ -48,5 +51,11 @@ public class PublicationConverter extends BaseConverter {
                         new VaccineOutputDTO(animal.getVaccine().getName(), animal.getVaccine().getDate(), animal.getVaccine().getValidity()),
                         new RemedyOutputDTO(animal.getRemedy().getName(), animal.getRemedy().getDate(), animal.getRemedy().getValidity()),
                         new DiseaseOutputDTO(animal.getDisease().getName())));
+    }
+
+    public String getCurrentDateTime () {
+        var dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        var date = new Date();
+        return dateFormat.format(date);
     }
 }

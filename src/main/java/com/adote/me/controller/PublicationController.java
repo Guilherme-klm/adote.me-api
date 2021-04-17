@@ -24,9 +24,6 @@ import java.util.Optional;
 @Tag(name = "publication")
 public class PublicationController {
 
-    @Value("${adoteme.images.root-folder}")
-    private String rootFolder;
-
     @Autowired
     private PublicationService service;
 
