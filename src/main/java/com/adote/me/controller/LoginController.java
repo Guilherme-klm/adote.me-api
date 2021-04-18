@@ -1,6 +1,7 @@
 package com.adote.me.controller;
 
 import com.adote.me.dtl.login.LoginInputDTO;
+import com.adote.me.dtl.login.LoginOutputDTO;
 import com.adote.me.service.LoginService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,12 @@ public class LoginController {
     private LoginService service;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<Long> getIdAccountByEmailAndPassword(@RequestBody LoginInputDTO loginInputDTO) {
-        var id = service.getIdUser(loginInputDTO);
+    public ResponseEntity<LoginOutputDTO> getIdAccountByEmailAndPassword(@RequestBody LoginInputDTO loginInputDTO) {
+        var outputDTO = service.getAccountIdAndName(loginInputDTO);
 
-        if (id == null) {
+        if (outputDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(id);
+        return ResponseEntity.ok(outputDTO);
     }
 }
