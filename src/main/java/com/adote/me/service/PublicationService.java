@@ -36,6 +36,10 @@ public class PublicationService {
         return repository.findAll();
     }
 
+    public List<PublicationOutputDTO> getPublicationsByLocalization(String localization,String value) {
+        return repository.findByPublicationByLocalization(localization, value);
+    }
+
     public void deleteAll() {
         repository.deleteAll();
     }

@@ -45,7 +45,7 @@ public class PublicationConverter extends BaseConverter {
         var publicationUser = this.publication.getPublicationUser();
         var animal = this.publication.getAnimal();
 
-        return new PublicationOutputDTO(publication.getId(), publication.getDescription(), publication.getImagesBase64(), publication.getState(), publication.getCity(), publication.getNeighborhood(), publication.getCreationTimeDate(),
+        return new PublicationOutputDTO(publication.getId().toString(), publication.getDescription(), publication.getImagesBase64(), publication.getState(), publication.getCity(), publication.getNeighborhood(), publication.getCreationTimeDate(),
                 new PublicationUserOutputDTO(publicationUser.getId(), publicationUser.getName()),
                 new AnimalOutputDTO(animal.getName(), animal.getBreed(),
                         new VaccineOutputDTO(animal.getVaccine().getName(), animal.getVaccine().getDate(), animal.getVaccine().getValidity()),

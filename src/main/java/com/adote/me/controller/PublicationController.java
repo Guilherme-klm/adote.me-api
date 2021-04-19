@@ -1,12 +1,11 @@
 package com.adote.me.controller;
 
 import com.adote.me.dtl.publication.PublicationInputDTO;
+import com.adote.me.dtl.publication.PublicationOutputDTO;
 import com.adote.me.model.Publication;
 import com.adote.me.service.PublicationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 
 @RestController
 @Tag(name = "publication")
@@ -34,19 +36,23 @@ public class PublicationController {
 
     @PostMapping(value = "/publication")
     public ResponseEntity<?> postPublication(@Valid @RequestBody PublicationInputDTO publicationInputDTO, BindingResult result) {
-        if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(result.getFieldError().getField()+ ": " + result.getFieldError().getDefaultMessage());
-        }
+        if (result.hasErrors())
+            return ResponseEntity.status(NOT_ACCEPTABLE).body(result.getFieldError().getField()+ ": " + result.getFieldError().getDefaultMessage());
 
         var publication = service.save(publicationInputDTO);
         var publicationOutput = service.converterClassToDto(publication);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(publicationOutput);
+        return ResponseEntity.status(CREATED).body(publicationOutput);
     }
 
-    @GetMapping(value = "/publications")
-    public List<Publication> getAllPublications() {
-        return service.getAll();
+    @GetMapping(value = "/publication/{localization}/{value}")
+    public ResponseEntity<List<PublicationOutputDTO>> getAllPublications(@PathVariable("localization") String localization ,@PathVariable("value") String value) {
+        var publications = service.getPublicationsByLocalization(localization, value);
+
+        if(publications.size() > 0)
+            return ResponseEntity.ok(publications);
+
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping(value = "/publications")

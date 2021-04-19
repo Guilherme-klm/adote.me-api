@@ -3,12 +3,13 @@ package com.adote.me.dtl.publication;
 import com.adote.me.dtl.animal.AnimalOutputDTO;
 import com.adote.me.dtl.comment.CommentOutputDTO;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
 public class PublicationOutputDTO {
 
-    private ObjectId id;
+    private String id;
 
     private String description;
 
@@ -30,7 +31,7 @@ public class PublicationOutputDTO {
 
     private AnimalOutputDTO animalOutputDTO;
 
-    public PublicationOutputDTO(ObjectId id, String description, String imagesBase64, String state, String city, String neighborhood, String creationTimeDate, PublicationUserOutputDTO publicationUserOutputDTO, AnimalOutputDTO animalOutputDTO) {
+    public PublicationOutputDTO(String id, String description, String imagesBase64, String state, String city, String neighborhood, String creationTimeDate, PublicationUserOutputDTO publicationUserOutputDTO, AnimalOutputDTO animalOutputDTO) {
         this.id = id;
         this.description = description;
         this.imagesBase64 = imagesBase64;
@@ -42,7 +43,7 @@ public class PublicationOutputDTO {
         this.animalOutputDTO = animalOutputDTO;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
