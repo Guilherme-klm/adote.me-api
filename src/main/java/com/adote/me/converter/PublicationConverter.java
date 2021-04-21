@@ -10,13 +10,17 @@ import com.adote.me.dtl.vaccine.VaccineOutputDTO;
 import com.adote.me.model.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PublicationConverter extends BaseConverter {
 
     private PublicationInputDTO publicationInputDTO;
 
     private Publication publication;
+
+    private List<Publication> publications;
 
     public PublicationConverter(PublicationInputDTO publicationInputDTO) {
         this.publicationInputDTO = publicationInputDTO;
@@ -26,12 +30,16 @@ public class PublicationConverter extends BaseConverter {
         this.publication = publication;
     }
 
+    public PublicationConverter(List<Publication> publications) {
+        this.publications = publications;
+    }
+
     @Override
     public Object dtoToEntity() {
         var publicationUserInput = publicationInputDTO.getPublicationUserInputDTO();
         var animalInput = publicationInputDTO.getAnimalInputDTO();
 
-        return new Publication(publicationInputDTO.getId(), publicationInputDTO.getDescription(),publicationInputDTO.convertToFile(), publicationInputDTO.getState(), publicationInputDTO.getCity(), publicationInputDTO.getNeighborhood(), getCurrentDateTime(),
+        return new Publication(publicationInputDTO.getId(), publicationInputDTO.getDescription(), publicationInputDTO.convertToFile(), publicationInputDTO.getState(), publicationInputDTO.getCity(), publicationInputDTO.getNeighborhood(), getCurrentDateTime(),
                 new PublicationUser(publicationUserInput.getId(), publicationUserInput.getName()),
                 new Animal(animalInput.getName(), animalInput.getBreed(),
                         new Vaccine(animalInput.getVaccineInputDTO().getName(), animalInput.getVaccineInputDTO().getDate(), animalInput.getVaccineInputDTO().getValidity()),
@@ -53,7 +61,21 @@ public class PublicationConverter extends BaseConverter {
                         new DiseaseOutputDTO(animal.getDisease().getName())));
     }
 
-    public String getCurrentDateTime () {
+    public List<PublicationOutputDTO> entityListToDtoList() {
+        var publicationsOutputDTO = new ArrayList<PublicationOutputDTO>();
+
+        for (var publication : this.publications) {
+            publicationsOutputDTO.add(new PublicationOutputDTO(publication.getId().toString(), publication.getDescription(), publication.getImagesBase64(), publication.getState(), publication.getCity(), publication.getNeighborhood(), publication.getCreationTimeDate(),
+                    new PublicationUserOutputDTO(publication.getPublicationUser().getId(), publication.getPublicationUser().getName()),
+                    new AnimalOutputDTO(publication.getAnimal().getName(), publication.getAnimal().getBreed(),
+                            new VaccineOutputDTO(publication.getAnimal().getVaccine().getName(), publication.getAnimal().getVaccine().getDate(), publication.getAnimal().getVaccine().getValidity()),
+                            new RemedyOutputDTO(publication.getAnimal().getRemedy().getName(), publication.getAnimal().getRemedy().getDate(), publication.getAnimal().getRemedy().getValidity()),
+                            new DiseaseOutputDTO(publication.getAnimal().getDisease().getName()))));
+        }
+        return publicationsOutputDTO;
+    }
+
+    private String getCurrentDateTime() {
         var dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         var date = new Date();
         return dateFormat.format(date);

@@ -22,6 +22,6 @@ public interface PublicationRepository extends MongoRepository<Publication, Stri
     void deleteById(String s);
 
     @Query("{ ':#{#localization}': :#{#value} }")
-    List<PublicationOutputDTO> findByPublicationByLocalization(@Param("localization") String localization, @Param("value") String value);
+    List<Publication> findByPublicationByLocalization(@Param("localization") String localization, @Param("value") String value);
 
 }

@@ -19,24 +19,27 @@ public class PublicationService {
 
     private PublicationConverter publicationConverter;
 
-    public Publication save (PublicationInputDTO publicationInputDTO) {
+    public PublicationOutputDTO save(PublicationInputDTO publicationInputDTO) {
         var publication = converterDtoToClass(publicationInputDTO);
-        return repository.save(publication);
+        var publicationSaved = repository.save(publication);
+        var publicationOutputDTO = converterClassToDto(publicationSaved);
+        return publicationOutputDTO;
+    }
+
+    public List<PublicationOutputDTO> findAllByLocalization(String localization, String value) {
+        var publications = getPublicationsByLocalization(localization, value);
+
+        if (publications.size() > 0)
+            return converterClassListToDtoList(publications);
+
+        return null;
     }
 
     public Optional<Publication> getById(String id) {
         return repository.findById(id);
     }
 
-    public void deleteById(String id) {
-        repository.deleteById(id);
-    }
-
-    public List<Publication> getAll() {
-        return repository.findAll();
-    }
-
-    public List<PublicationOutputDTO> getPublicationsByLocalization(String localization,String value) {
+    private List<Publication> getPublicationsByLocalization(String localization, String value) {
         return repository.findByPublicationByLocalization(localization, value);
     }
 
@@ -49,8 +52,13 @@ public class PublicationService {
         return (Publication) publicationConverter.dtoToEntity();
     }
 
-    public PublicationOutputDTO converterClassToDto(Publication publication) {
+    private PublicationOutputDTO converterClassToDto(Publication publication) {
         publicationConverter = new PublicationConverter(publication);
         return (PublicationOutputDTO) publicationConverter.entityToDto();
+    }
+
+    private List<PublicationOutputDTO> converterClassListToDtoList(List<Publication> publications) {
+        publicationConverter = new PublicationConverter(publications);
+        return publicationConverter.entityListToDtoList();
     }
 }

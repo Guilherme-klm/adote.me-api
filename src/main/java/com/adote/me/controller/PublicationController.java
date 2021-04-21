@@ -39,17 +39,16 @@ public class PublicationController {
         if (result.hasErrors())
             return ResponseEntity.status(NOT_ACCEPTABLE).body(result.getFieldError().getField()+ ": " + result.getFieldError().getDefaultMessage());
 
-        var publication = service.save(publicationInputDTO);
-        var publicationOutput = service.converterClassToDto(publication);
+        var publicationOutput = service.save(publicationInputDTO);
 
         return ResponseEntity.status(CREATED).body(publicationOutput);
     }
 
     @GetMapping(value = "/publication/{localization}/{value}")
     public ResponseEntity<List<PublicationOutputDTO>> getAllPublications(@PathVariable("localization") String localization ,@PathVariable("value") String value) {
-        var publications = service.getPublicationsByLocalization(localization, value);
+        var publications = service.findAllByLocalization(localization, value);
 
-        if(publications.size() > 0)
+        if(publications != null)
             return ResponseEntity.ok(publications);
 
         return ResponseEntity.notFound().build();
