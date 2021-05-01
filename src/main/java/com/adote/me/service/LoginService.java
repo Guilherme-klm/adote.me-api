@@ -20,8 +20,7 @@ public class LoginService {
     public LoginOutputDTO getAccountIdAndName(LoginInputDTO inputDTO) {
         var login = converterDtoToClass(inputDTO);
         var userLogged = getIdUser(login);
-        var loginOutputDTO = converterClassToDto(userLogged);
-        return loginOutputDTO;
+        return converterClassToDto(userLogged);
     }
 
     private UserLogged getIdUser(Login login) {
