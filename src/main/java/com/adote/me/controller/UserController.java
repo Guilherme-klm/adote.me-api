@@ -2,6 +2,7 @@ package com.adote.me.controller;
 
 import com.adote.me.dtl.user.UserInputDTO;
 import com.adote.me.dtl.user.UserOutputDTO;
+import com.adote.me.exception.ErrorResponse;
 import com.adote.me.model.User;
 import com.adote.me.service.UserService;
 import com.fasterxml.jackson.databind.JsonSerializable;
@@ -39,12 +40,10 @@ public class UserController {
     @PostMapping(value = "/user")
     public ResponseEntity<?> postUser (@Valid @RequestBody UserInputDTO userInputDTO, BindingResult result) {
 
-        if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(format("{'code': 406, 'message': '%s'}",result.getFieldError().getDefaultMessage()));
-        }
+        if (result.hasErrors())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(result.getFieldError().getDefaultMessage()));
 
-        var user = userService.save(userInputDTO.dtoToUser());
-        var userOutputDTO = new UserOutputDTO(user.getId(), user.getName(), user.getBirthDate(), user.getEmail(), user.getPassword(), user.getAddress());
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        userService.save(userInputDTO.dtoToUser());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
