@@ -20,37 +20,31 @@ public class PublicationInputDTO {
 
     private ObjectId id;
 
-    @JsonProperty("description")
-    @NotEmpty
+    @NotEmpty(message = "Descrição não pode ser vazio")
     private String description;
 
-    private String imageName;
-
-    @JsonProperty("image")
-    private String image;
-
-    @JsonProperty("state")
-    @NotEmpty
+    @NotEmpty(message = "Estado não pode ser vazio")
     private String state;
 
-    @JsonProperty("city")
-    @NotEmpty
+    @NotEmpty(message = "Cidade não pode ser vazio")
     private String city;
 
-    @JsonProperty("neighborhood")
+    @NotEmpty(message = "Bairro não pode ser vazio")
     private String neighborhood;
 
-    @JsonProperty("comments")
-    @Valid
     private List<Comment> comments;
 
-    @JsonProperty("user")
-    @Valid
-    private PublicationUserInputDTO publicationUserInputDTO;
+    private PublicationUserInputDTO user;
 
-    @JsonProperty("animal")
-    @Valid
-    private AnimalInputDTO animalInputDTO;
+    private AnimalInputDTO animal;
+
+    public void validateFields() throws Exception {
+        validateDescription();
+        validateState();
+        validateCity();
+        validateNeighborhood();
+        animal.validateAnimal();
+    }
 
     public ObjectId getId() {
         if (id == null)
@@ -60,14 +54,6 @@ public class PublicationInputDTO {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public String getImage() {
-        return image;
     }
 
     public String getState() {
@@ -87,26 +73,34 @@ public class PublicationInputDTO {
     }
 
     public PublicationUserInputDTO getPublicationUserInputDTO() {
-        return publicationUserInputDTO;
+        return user;
     }
 
     public AnimalInputDTO getAnimalInputDTO() {
-        return animalInputDTO;
+        return animal;
     }
 
-    public String convertToFile() {
-        if(image != null) {
-            var imageName = "C:\\images\\".concat(getId().toString().concat(".jpg"));
-            try {
-                byte[] decoded = Base64.getDecoder().decode(image);
-                InputStream is = new ByteArrayInputStream(decoded);
-                BufferedImage bi = ImageIO.read(is);
-                ImageIO.write(bi, "jpg", new File(imageName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return imageName;
+    private void validateDescription() throws Exception {
+        if (description.isEmpty()) {
+            throw new Exception(getClass().getDeclaredField("description").getAnnotation(NotEmpty.class).message());
         }
-        return null;
+    }
+
+    private void validateState() throws Exception {
+        if (state.isEmpty()) {
+            throw new Exception(getClass().getDeclaredField("state").getAnnotation(NotEmpty.class).message());
+        }
+    }
+
+    private void validateCity() throws Exception {
+        if (city.isEmpty()) {
+            throw new Exception(getClass().getDeclaredField("city").getAnnotation(NotEmpty.class).message());
+        }
+    }
+
+    private void validateNeighborhood() throws Exception {
+        if (neighborhood.isEmpty()) {
+            throw new Exception(getClass().getDeclaredField("neighborhood").getAnnotation(NotEmpty.class).message());
+        }
     }
 }

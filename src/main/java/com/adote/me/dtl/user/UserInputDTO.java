@@ -23,7 +23,7 @@ public class UserInputDTO {
     private String birthDate;
 
     @NotEmpty(message = "E-mail invalido")
-    @Email()
+    @Email(message = "E-mail inválido")
     @JsonProperty("email")
     private String email;
 

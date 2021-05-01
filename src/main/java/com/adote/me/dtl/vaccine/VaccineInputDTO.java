@@ -1,16 +1,16 @@
 package com.adote.me.dtl.vaccine;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotEmpty;
 
 public class VaccineInputDTO {
 
-    @JsonProperty("name")
+    @NotEmpty(message = "Nome da vacina não pode ser vazio")
     private String name;
 
-    @JsonProperty("date")
+    @NotEmpty(message = "Data da vacina não pode ser vazia")
     private String date;
 
-    @JsonProperty("validity")
+    @NotEmpty(message = "Validade da vacina não pode ser vazia")
     private String validity;
 
     public String getName() {
@@ -23,5 +23,17 @@ public class VaccineInputDTO {
 
     public String getValidity() {
         return validity;
+    }
+
+    public void validateVaccine() throws Exception {
+        if (name.equals("") && (!date.isEmpty() || !validity.isEmpty()))
+            throw new Exception(getClass().getDeclaredField("name").getAnnotation(NotEmpty.class).message());
+
+        if (!name.equals("") && date.isEmpty())
+            throw new Exception(getClass().getDeclaredField("date").getAnnotation(NotEmpty.class).message());
+
+        if (!name.equals("") && validity.isEmpty())
+            throw new Exception(getClass().getDeclaredField("validity").getAnnotation(NotEmpty.class).message());
+
     }
 }

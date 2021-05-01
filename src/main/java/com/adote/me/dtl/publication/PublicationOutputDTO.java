@@ -5,6 +5,11 @@ import com.adote.me.dtl.comment.CommentOutputDTO;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class PublicationOutputDTO {
@@ -13,7 +18,7 @@ public class PublicationOutputDTO {
 
     private String description;
 
-    private String imagesBase64;
+    private String imageLink;
 
     private String state;
 
@@ -31,10 +36,10 @@ public class PublicationOutputDTO {
 
     private AnimalOutputDTO animalOutputDTO;
 
-    public PublicationOutputDTO(String id, String description, String imagesBase64, String state, String city, String neighborhood, String creationTimeDate, PublicationUserOutputDTO publicationUserOutputDTO, AnimalOutputDTO animalOutputDTO) {
+    public PublicationOutputDTO(String id, String description, String imageLink, String state, String city, String neighborhood, String creationTimeDate, PublicationUserOutputDTO publicationUserOutputDTO, AnimalOutputDTO animalOutputDTO) {
         this.id = id;
         this.description = description;
-        this.imagesBase64 = imagesBase64;
+        this.imageLink = imageLink;
         this.state = state;
         this.city = city;
         this.neighborhood = neighborhood;
@@ -51,8 +56,8 @@ public class PublicationOutputDTO {
         return description;
     }
 
-    public String getImagesBase64() {
-        return imagesBase64;
+    public String getImageLink() {
+        return imageLink;
     }
 
     public String getState() {

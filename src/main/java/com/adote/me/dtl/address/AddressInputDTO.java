@@ -30,7 +30,7 @@ public class AddressInputDTO {
 
     @PositiveOrZero(message = "Número não pode ser negativo")
     @JsonProperty("number")
-    @NotNull
+    @NotNull(message = "Número não pode ser vazio")
     private long number;
 
     public AddressInputDTO(String country, String state, String city, String neighborhood, String street, Long number) {

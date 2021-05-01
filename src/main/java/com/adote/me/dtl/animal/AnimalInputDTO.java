@@ -9,23 +9,24 @@ import javax.validation.constraints.NotEmpty;
 
 public class AnimalInputDTO {
 
-    @JsonProperty("name")
-    @NotEmpty
+    @NotEmpty(message = "Nome não pode ser vazio")
     private String name;
 
-    @JsonProperty("breed")
-    @NotEmpty
+    @NotEmpty(message = "Raça não pode ser vazia")
     private String breed;
 
-    @JsonProperty("vaccine")
-    private VaccineInputDTO vaccineInputDTO;
+    private VaccineInputDTO vaccine;
 
-    @JsonProperty("remedy")
-    private RemedyInputDTO remedyInputDTO;
+    private RemedyInputDTO remedy;
 
-    @JsonProperty("disease")
-    private DiseaseInputDTO diseaseInputDTO;
+    private DiseaseInputDTO disease;
 
+    public void validateAnimal() throws Exception {
+        validateName();
+        validateBreed();
+        vaccine.validateVaccine();
+        remedy.validateRemedy();
+    }
 
     public String getName() {
         return name;
@@ -36,14 +37,26 @@ public class AnimalInputDTO {
     }
 
     public VaccineInputDTO getVaccineInputDTO() {
-        return vaccineInputDTO;
+        return vaccine;
     }
 
     public RemedyInputDTO getRemedyInputDTO() {
-        return remedyInputDTO;
+        return remedy;
     }
 
     public DiseaseInputDTO getDiseaseInputDTO() {
-        return diseaseInputDTO;
+        return disease;
+    }
+
+    private void validateName() throws Exception {
+        if (name.isEmpty()) {
+            throw new Exception(getClass().getDeclaredField("name").getAnnotation(NotEmpty.class).message());
+        }
+    }
+
+    private void validateBreed() throws Exception {
+        if (breed.isEmpty()) {
+            throw new Exception(getClass().getDeclaredField("breed").getAnnotation(NotEmpty.class).message());
+        }
     }
 }

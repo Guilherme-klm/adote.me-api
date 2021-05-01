@@ -17,8 +17,8 @@ public class Publication {
     @Field("description")
     private String description;
 
-    @Field("imagesBase64")
-    private String imagesBase64;
+    @Field("imageNamePath")
+    private String imageNamePath;
 
     @Field("state")
     private String state;
@@ -44,10 +44,10 @@ public class Publication {
     @Field("animal")
     private Animal animal;
 
-    public Publication(ObjectId id, String description, String imagesBase64, String state, String city, String neighborhood, String creationTimeDate, PublicationUser publicationUser, Animal animal) {
+    public Publication(ObjectId id, String description, String imageNamePath, String state,String city, String neighborhood, String creationTimeDate, PublicationUser publicationUser, Animal animal) {
         this.id = id;
         this.description = description;
-        this.imagesBase64 = imagesBase64;
+        this.imageNamePath = imageNamePath;
         this.state = state;
         this.city = city;
         this.neighborhood = neighborhood;
@@ -66,8 +66,8 @@ public class Publication {
         return description;
     }
 
-    public String getImagesBase64() {
-        return imagesBase64;
+    public String getImageNamePath() {
+        return imageNamePath;
     }
 
     public String getState() {

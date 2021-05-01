@@ -7,6 +7,7 @@ import com.adote.me.model.Publication;
 import com.adote.me.repository.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +18,16 @@ public class PublicationService {
     @Autowired
     private PublicationRepository repository;
 
+    @Autowired
+    private FileStorage storageService;
+
     private PublicationConverter publicationConverter;
 
-    public PublicationOutputDTO save(PublicationInputDTO publicationInputDTO) {
-        var publication = converterDtoToClass(publicationInputDTO);
-        var publicationSaved = repository.save(publication);
-        var publicationOutputDTO = converterClassToDto(publicationSaved);
-        return publicationOutputDTO;
+    public void save(PublicationInputDTO publicationInputDTO, MultipartFile image) {
+        var imageNamePath = storageService.storeFile(image);
+        var publication = converterDtoToClass(publicationInputDTO, imageNamePath);
+        repository.save(publication);
+        storageService.saveImageInFolder();
     }
 
     public List<PublicationOutputDTO> findAllByLocalization(String localization, String value) {
@@ -43,18 +47,9 @@ public class PublicationService {
         return repository.findByPublicationByLocalization(localization, value);
     }
 
-    public void deleteAll() {
-        repository.deleteAll();
-    }
-
-    public Publication converterDtoToClass(PublicationInputDTO publicationInputDTO) {
-        publicationConverter = new PublicationConverter(publicationInputDTO);
+    public Publication converterDtoToClass(PublicationInputDTO publicationInputDTO, String image) {
+        publicationConverter = new PublicationConverter(publicationInputDTO, image);
         return (Publication) publicationConverter.dtoToEntity();
-    }
-
-    private PublicationOutputDTO converterClassToDto(Publication publication) {
-        publicationConverter = new PublicationConverter(publication);
-        return (PublicationOutputDTO) publicationConverter.entityToDto();
     }
 
     private List<PublicationOutputDTO> converterClassListToDtoList(List<Publication> publications) {

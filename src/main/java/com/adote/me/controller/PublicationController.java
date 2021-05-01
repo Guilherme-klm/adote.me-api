@@ -2,16 +2,17 @@ package com.adote.me.controller;
 
 import com.adote.me.dtl.publication.PublicationInputDTO;
 import com.adote.me.dtl.publication.PublicationOutputDTO;
+import com.adote.me.exception.ErrorResponse;
 import com.adote.me.model.Publication;
+import com.adote.me.service.FileStorage;
 import com.adote.me.service.PublicationService;
+import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
-import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,19 +30,25 @@ public class PublicationController {
     @Autowired
     private PublicationService service;
 
+    @Autowired
+    private FileStorage storageService;
+
     @GetMapping(value = "/publication/{id}")
     public Optional<Publication> getPublicationById(@PathVariable("id") String id) {
         return service.getById(id);
     }
 
     @PostMapping(value = "/publication")
-    public ResponseEntity<?> postPublication(@Valid @RequestBody PublicationInputDTO publicationInputDTO, BindingResult result) {
-        if (result.hasErrors())
-            return ResponseEntity.status(NOT_ACCEPTABLE).body(result.getFieldError().getField()+ ": " + result.getFieldError().getDefaultMessage());
-
-        var publicationOutput = service.save(publicationInputDTO);
-
-        return ResponseEntity.status(CREATED).body(publicationOutput);
+    @ResponseBody
+    public ResponseEntity<?> postPublication(@RequestParam("publication") String publicationInputDTO) {
+        try {
+            var publication = new Gson().fromJson(publicationInputDTO, PublicationInputDTO.class);
+            publication.validateFields();
+            service.save(publication, null);
+            return ResponseEntity.status(CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_ACCEPTABLE).body(new ErrorResponse(e.getMessage()).createErrorMessage());
+        }
     }
 
     @GetMapping(value = "/publication/{localization}/{value}")
@@ -54,17 +61,12 @@ public class PublicationController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping(value = "/publications")
-    public void deleteAllPublications() {
-        service.deleteAll();
-    }
-
-    @GetMapping(value = "/publication/image/{publication_id}", produces = "image/jpg")
+    @GetMapping(value = "/image/{publication_id}", produces = "image/jpg")
     public byte[] getImages(@PathVariable("publication_id") String id) throws IOException {
         Optional<Publication> publication = service.getById(id);
 
-        if(publication.isPresent()){
-            BufferedImage image = ImageIO.read(new File(publication.get().getImagesBase64()));
+        if(publication.isPresent() && publication.get().getImageNamePath() != null){
+            BufferedImage image = ImageIO.read(new File(publication.get().getImageNamePath()));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             byte[] bytes = baos.toByteArray();

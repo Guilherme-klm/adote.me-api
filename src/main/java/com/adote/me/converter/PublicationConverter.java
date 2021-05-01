@@ -22,8 +22,11 @@ public class PublicationConverter extends BaseConverter {
 
     private List<Publication> publications;
 
-    public PublicationConverter(PublicationInputDTO publicationInputDTO) {
+    private String image;
+
+    public PublicationConverter(PublicationInputDTO publicationInputDTO, String image) {
         this.publicationInputDTO = publicationInputDTO;
+        this.image = image;
     }
 
     public PublicationConverter(Publication publication) {
@@ -39,7 +42,7 @@ public class PublicationConverter extends BaseConverter {
         var publicationUserInput = publicationInputDTO.getPublicationUserInputDTO();
         var animalInput = publicationInputDTO.getAnimalInputDTO();
 
-        return new Publication(publicationInputDTO.getId(), publicationInputDTO.getDescription(), publicationInputDTO.convertToFile(), publicationInputDTO.getState(), publicationInputDTO.getCity(), publicationInputDTO.getNeighborhood(), getCurrentDateTime(),
+        return new Publication(publicationInputDTO.getId(), publicationInputDTO.getDescription(), image, publicationInputDTO.getState(), publicationInputDTO.getCity(), publicationInputDTO.getNeighborhood(), getCurrentDateTime(),
                 new PublicationUser(publicationUserInput.getId(), publicationUserInput.getName()),
                 new Animal(animalInput.getName(), animalInput.getBreed(),
                         new Vaccine(animalInput.getVaccineInputDTO().getName(), animalInput.getVaccineInputDTO().getDate(), animalInput.getVaccineInputDTO().getValidity()),
@@ -53,7 +56,7 @@ public class PublicationConverter extends BaseConverter {
         var publicationUser = this.publication.getPublicationUser();
         var animal = this.publication.getAnimal();
 
-        return new PublicationOutputDTO(publication.getId().toString(), publication.getDescription(), publication.getImagesBase64(), publication.getState(), publication.getCity(), publication.getNeighborhood(), publication.getCreationTimeDate(),
+        return new PublicationOutputDTO(publication.getId().toString(), publication.getDescription(), publication.getImageNamePath(), publication.getState(), publication.getCity(), publication.getNeighborhood(), publication.getCreationTimeDate(),
                 new PublicationUserOutputDTO(publicationUser.getId(), publicationUser.getName()),
                 new AnimalOutputDTO(animal.getName(), animal.getBreed(),
                         new VaccineOutputDTO(animal.getVaccine().getName(), animal.getVaccine().getDate(), animal.getVaccine().getValidity()),
@@ -65,7 +68,7 @@ public class PublicationConverter extends BaseConverter {
         var publicationsOutputDTO = new ArrayList<PublicationOutputDTO>();
 
         for (var publication : this.publications) {
-            publicationsOutputDTO.add(new PublicationOutputDTO(publication.getId().toString(), publication.getDescription(), publication.getImagesBase64(), publication.getState(), publication.getCity(), publication.getNeighborhood(), publication.getCreationTimeDate(),
+            publicationsOutputDTO.add(new PublicationOutputDTO(publication.getId().toString(), publication.getDescription(), publication.getImageNamePath(), publication.getState(), publication.getCity(), publication.getNeighborhood(), publication.getCreationTimeDate(),
                     new PublicationUserOutputDTO(publication.getPublicationUser().getId(), publication.getPublicationUser().getName()),
                     new AnimalOutputDTO(publication.getAnimal().getName(), publication.getAnimal().getBreed(),
                             new VaccineOutputDTO(publication.getAnimal().getVaccine().getName(), publication.getAnimal().getVaccine().getDate(), publication.getAnimal().getVaccine().getValidity()),
