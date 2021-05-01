@@ -21,12 +21,4 @@ public class UserService {
     public Optional<User> getById(Long id) {
         return repository.findById(id);
     }
-
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    public List<User> getAll() {
-        return repository.findAll();
-    }
 }

@@ -26,13 +26,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/user")
-    public List<User> allUsers () {
-        return userService.getAll();
-    }
-
     @GetMapping(value = "/user/{id}")
-    public ResponseEntity<Optional<User>> getUserById (@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> getUserById (@PathVariable(value = "id") Long id) {
         var user = userService.getById(id);
 
         if(user.isEmpty())
@@ -51,11 +46,5 @@ public class UserController {
         var user = userService.save(userInputDTO.dtoToUser());
         var userOutputDTO = new UserOutputDTO(user.getId(), user.getName(), user.getBirthDate(), user.getEmail(), user.getPassword(), user.getAddress());
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
-    }
-
-    @DeleteMapping(value = "/user/{id}")
-    public ResponseEntity<?> deleteUser (@PathVariable(value = "id") Long id) {
-        userService.deleteById(id);
-        return ResponseEntity.ok().body("Usuário deletado com sucesso!");
     }
 }
