@@ -8,9 +8,11 @@ import com.adote.me.service.FileStorage;
 import com.adote.me.service.PublicationService;
 import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.api.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -40,12 +42,12 @@ public class PublicationController {
 
     @PostMapping(value = "/publication")
     @ResponseBody
-    public ResponseEntity<?> postPublication(@RequestParam("publication") String publicationInputDTO) {
+    public ResponseEntity<?> postPublication(@RequestParam("publication") String publicationInputDTO, @RequestParam("image") MultipartFile image) {
         try {
             var publication = new Gson().fromJson(publicationInputDTO, PublicationInputDTO.class);
             publication.validateFields();
-            service.save(publication, null);
-            return ResponseEntity.status(CREATED).build();
+            service.save(publication, image);
+            return ResponseEntity.ok(CREATED);
         } catch (Exception e) {
             return ResponseEntity.status(NOT_ACCEPTABLE).body(new ErrorResponse(e.getMessage()).createErrorMessage());
         }
