@@ -1,11 +1,16 @@
 package com.adote.me.model;
 
+import com.adote.me.dtl.animal.AnimalInputDTO;
+import com.adote.me.dtl.publication.PublicationInputDTO;
+import com.adote.me.dtl.publication.PublicationUserInputDTO;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import javax.persistence.Id;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "publication")
@@ -17,8 +22,8 @@ public class Publication {
     @Field("description")
     private String description;
 
-    @Field("imageNamePath")
-    private String imageNamePath;
+    @Field("imagePathName")
+    private String imagePathName;
 
     @Field("state")
     private String state;
@@ -44,19 +49,33 @@ public class Publication {
     @Field("animal")
     private Animal animal;
 
-    public Publication(ObjectId id, String description, String imageNamePath, String state,String city, String neighborhood, String creationTimeDate, PublicationUser publicationUser, Animal animal) {
+    public Publication(ObjectId id, String description, String imagePathName, String state, String city, String neighborhood, String creationTimeDate, PublicationUser publicationUser, Animal animal) {
         this.id = id;
         this.description = description;
-        this.imageNamePath = imageNamePath;
+        this.imagePathName = imagePathName;
         this.state = state;
         this.city = city;
         this.neighborhood = neighborhood;
         this.creationTimeDate = creationTimeDate;
-        this.publicationUser = publicationUser;
-        this.animal = animal;
+        this.publicationUser = new PublicationUser();
+        this.animal = new Animal();
     }
 
-    public Publication () {}
+    public Publication publicationBuilder(PublicationInputDTO inputDTO, String imagePathName) {
+        return builder()
+                .withId(inputDTO.getId())
+                .withDescription(inputDTO.getDescription())
+                .withImagePathName(imagePathName)
+                .withState(inputDTO.getState())
+                .withCity(inputDTO.getCity())
+                .withNeighborhood(inputDTO.getNeighborhood())
+                .withCreationTimeDate(getCurrentDateTime())
+                .withPublicationUser(inputDTO.getPublicationUserInputDTO())
+                .withAnimal(inputDTO.getAnimalInputDTO())
+                .build();
+    }
+
+    public Publication() {}
 
     public ObjectId getId() {
         return id;
@@ -66,8 +85,8 @@ public class Publication {
         return description;
     }
 
-    public String getImageNamePath() {
-        return imageNamePath;
+    public String getImagePathName() {
+        return imagePathName;
     }
 
     public String getState() {
@@ -102,4 +121,71 @@ public class Publication {
         return animal;
     }
 
+    private String getCurrentDateTime() {
+        var dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        var date = new Date();
+        return dateFormat.format(date);
+    }
+
+    public static Builder builder() {
+        return new Publication().new Builder();
+    }
+
+    public class Builder {
+
+        private Publication publication;
+
+        Builder() {
+            this.publication = new Publication();
+        }
+
+        public Publication build() {
+            return publication;
+        }
+
+        public Builder withId(ObjectId id) {
+            publication.id = id;
+            return this;
+        }
+
+        public Builder withDescription(String description) {
+            publication.description = description;
+            return this;
+        }
+
+        public Builder withImagePathName(String imagePathName) {
+            publication.imagePathName = imagePathName;
+            return this;
+        }
+
+        public Builder withState(String state) {
+            publication.state = state;
+            return this;
+        }
+
+        public Builder withCity(String city) {
+            publication.city = city;
+            return this;
+        }
+
+        public Builder withNeighborhood(String neighborhood) {
+            publication.neighborhood = neighborhood;
+            return this;
+        }
+
+        public Builder withCreationTimeDate(String creationTimeDate) {
+            publication.creationTimeDate = creationTimeDate;
+            return this;
+        }
+
+        public Builder withPublicationUser(PublicationUserInputDTO user) {
+            publication.publicationUser = new PublicationUser(user);
+            return this;
+        }
+
+        public Builder withAnimal(AnimalInputDTO animal) {
+            publication.animal = new Animal(animal);
+            return this;
+        }
+    }
 }

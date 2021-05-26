@@ -1,10 +1,11 @@
-package com.adote.me.service;
+package com.adote.me.bl;
 
 import com.adote.me.converter.PublicationConverter;
 import com.adote.me.dtl.publication.PublicationInputDTO;
 import com.adote.me.dtl.publication.PublicationOutputDTO;
 import com.adote.me.model.Publication;
 import com.adote.me.repository.PublicationRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,11 @@ public class PublicationService {
         var publication = converterDtoToClass(publicationInputDTO, imageNamePath);
         repository.save(publication);
         storageService.saveImageInFolder();
+    }
+
+    public PublicationOutputDTO getPublicationById(String id) {
+        Publication publication = getById(id).get();
+        return convertClassToDto(publication);
     }
 
     public List<PublicationOutputDTO> findAllByLocalization(String localization, String value) {
@@ -55,5 +61,10 @@ public class PublicationService {
     private List<PublicationOutputDTO> converterClassListToDtoList(List<Publication> publications) {
         publicationConverter = new PublicationConverter(publications);
         return publicationConverter.entityListToDtoList();
+    }
+
+    private PublicationOutputDTO convertClassToDto (Publication publication) {
+        publicationConverter = new PublicationConverter(publication);
+        return (PublicationOutputDTO) publicationConverter.entityToDto();
     }
 }

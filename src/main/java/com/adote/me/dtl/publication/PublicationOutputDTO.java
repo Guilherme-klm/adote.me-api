@@ -2,14 +2,8 @@ package com.adote.me.dtl.publication;
 
 import com.adote.me.dtl.animal.AnimalOutputDTO;
 import com.adote.me.dtl.comment.CommentOutputDTO;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+import com.adote.me.model.Publication;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class PublicationOutputDTO {
@@ -36,16 +30,16 @@ public class PublicationOutputDTO {
 
     private AnimalOutputDTO animalOutputDTO;
 
-    public PublicationOutputDTO(String id, String description, String imageLink, String state, String city, String neighborhood, String creationTimeDate, PublicationUserOutputDTO publicationUserOutputDTO, AnimalOutputDTO animalOutputDTO) {
-        this.id = id;
-        this.description = description;
-        this.imageLink = imageLink;
-        this.state = state;
-        this.city = city;
-        this.neighborhood = neighborhood;
-        this.creationTimeDate = creationTimeDate;
-        this.publicationUserOutputDTO = publicationUserOutputDTO;
-        this.animalOutputDTO = animalOutputDTO;
+    public PublicationOutputDTO (Publication publication) {
+        this.id = publication.getId().toString();
+        this.description = publication.getDescription();
+        this.imageLink = publication.getImagePathName();
+        this.state = publication.getState();
+        this.city = publication.getCity();
+        this.neighborhood = publication.getNeighborhood();
+        this.creationTimeDate = publication.getCreationTimeDate();
+        this.publicationUserOutputDTO = new PublicationUserOutputDTO(publication.getPublicationUser());
+        this.animalOutputDTO = new AnimalOutputDTO(publication.getAnimal());
     }
 
     public String getId() {

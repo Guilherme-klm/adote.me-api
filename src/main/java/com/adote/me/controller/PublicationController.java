@@ -4,11 +4,10 @@ import com.adote.me.dtl.publication.PublicationInputDTO;
 import com.adote.me.dtl.publication.PublicationOutputDTO;
 import com.adote.me.exception.ErrorResponse;
 import com.adote.me.model.Publication;
-import com.adote.me.service.FileStorage;
-import com.adote.me.service.PublicationService;
+import com.adote.me.bl.FileStorage;
+import com.adote.me.bl.PublicationService;
 import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springdoc.api.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +35,8 @@ public class PublicationController {
     private FileStorage storageService;
 
     @GetMapping(value = "/publication/{id}")
-    public Optional<Publication> getPublicationById(@PathVariable("id") String id) {
-        return service.getById(id);
+    public PublicationOutputDTO getPublicationById(@PathVariable("id") String id) {
+        return service.getPublicationById(id);
     }
 
     @PostMapping(value = "/publication")
@@ -67,8 +66,8 @@ public class PublicationController {
     public byte[] getImages(@PathVariable("publication_id") String id) throws IOException {
         Optional<Publication> publication = service.getById(id);
 
-        if(publication.isPresent() && publication.get().getImageNamePath() != null){
-            BufferedImage image = ImageIO.read(new File(publication.get().getImageNamePath()));
+        if(publication.isPresent() && publication.get().getImagePathName() != null){
+            BufferedImage image = ImageIO.read(new File(publication.get().getImagePathName()));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             byte[] bytes = baos.toByteArray();

@@ -1,5 +1,6 @@
 package com.adote.me.model;
 
+import com.adote.me.dtl.animal.AnimalInputDTO;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 public class Animal {
@@ -19,12 +20,12 @@ public class Animal {
     @Field("diseaseInputDTO")
     private Disease disease;
 
-    public Animal(String name, String breed, Vaccine vaccine, Remedy remedy, Disease disease) {
-        this.name = name;
-        this.breed = breed;
-        this.vaccine = vaccine;
-        this.remedy = remedy;
-        this.disease = disease;
+    public Animal(AnimalInputDTO inputDTO) {
+        this.name = inputDTO.getName();
+        this.breed = inputDTO.getBreed();
+        this.vaccine = new Vaccine(inputDTO.getVaccineInputDTO());
+        this.remedy = new Remedy(inputDTO.getRemedyInputDTO());
+        this.disease = new Disease(inputDTO.getDiseaseInputDTO());
     }
 
     public Animal() {}

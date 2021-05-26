@@ -17,7 +17,7 @@ public class UserInputDTO {
     @JsonProperty("name")
     private String name;
 
-    @NotEmpty
+    @NotEmpty(message = "Data de nascimento não pode ser vazio")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonProperty("birthDate")
     private String birthDate;

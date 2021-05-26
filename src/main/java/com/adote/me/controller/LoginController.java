@@ -2,7 +2,7 @@ package com.adote.me.controller;
 
 import com.adote.me.dtl.login.LoginInputDTO;
 import com.adote.me.dtl.login.LoginOutputDTO;
-import com.adote.me.service.LoginService;
+import com.adote.me.bl.LoginService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

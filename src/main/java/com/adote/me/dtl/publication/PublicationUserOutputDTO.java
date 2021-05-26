@@ -1,14 +1,16 @@
 package com.adote.me.dtl.publication;
 
+import com.adote.me.model.PublicationUser;
+
 public class PublicationUserOutputDTO {
 
     private Long id;
 
     private String name;
 
-    public PublicationUserOutputDTO(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public PublicationUserOutputDTO(PublicationUser user) {
+        this.id = user.getId();
+        this.name = user.getName();
     }
 
     public Long getId() {

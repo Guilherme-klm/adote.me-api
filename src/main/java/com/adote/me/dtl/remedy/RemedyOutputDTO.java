@@ -1,5 +1,7 @@
 package com.adote.me.dtl.remedy;
 
+import com.adote.me.model.Remedy;
+
 public class RemedyOutputDTO {
 
     private String name;
@@ -8,10 +10,10 @@ public class RemedyOutputDTO {
 
     private String validity;
 
-    public RemedyOutputDTO(String name, String date, String validity) {
-        this.name = name;
-        this.date = date;
-        this.validity = validity;
+    public RemedyOutputDTO(Remedy remedy) {
+        this.name = remedy.getName();
+        this.date = remedy.getDate();
+        this.validity = remedy.getValidity();
     }
 
     public String getName() {

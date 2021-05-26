@@ -1,4 +1,4 @@
-package com.adote.me.service;
+package com.adote.me.bl;
 
 import net.bytebuddy.utility.RandomString;
 import org.slf4j.Logger;

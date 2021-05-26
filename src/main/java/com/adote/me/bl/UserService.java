@@ -1,4 +1,4 @@
-package com.adote.me.service;
+package com.adote.me.bl;
 
 import com.adote.me.model.User;
 import com.adote.me.repository.UserRepository;

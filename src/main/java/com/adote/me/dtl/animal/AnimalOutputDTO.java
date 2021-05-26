@@ -3,6 +3,7 @@ package com.adote.me.dtl.animal;
 import com.adote.me.dtl.disease.DiseaseOutputDTO;
 import com.adote.me.dtl.remedy.RemedyOutputDTO;
 import com.adote.me.dtl.vaccine.VaccineOutputDTO;
+import com.adote.me.model.Animal;
 
 public class AnimalOutputDTO {
 
@@ -16,12 +17,12 @@ public class AnimalOutputDTO {
 
     private DiseaseOutputDTO diseaseOutputDTO;
 
-    public AnimalOutputDTO(String name, String breed, VaccineOutputDTO vaccineOutputDTO, RemedyOutputDTO remedyOutputDTO, DiseaseOutputDTO diseaseOutputDTO) {
-        this.name = name;
-        this.breed = breed;
-        this.vaccineOutputDTO = vaccineOutputDTO;
-        this.remedyOutputDTO = remedyOutputDTO;
-        this.diseaseOutputDTO = diseaseOutputDTO;
+    public AnimalOutputDTO(Animal animal) {
+        this.name = animal.getName();
+        this.breed = animal.getBreed();
+        this.vaccineOutputDTO = new VaccineOutputDTO(animal.getVaccine());
+        this.remedyOutputDTO = new RemedyOutputDTO(animal.getRemedy());
+        this.diseaseOutputDTO = new DiseaseOutputDTO(animal.getDisease());
     }
 
     public String getName() {

@@ -1,5 +1,7 @@
 package com.adote.me.dtl.vaccine;
 
+import com.adote.me.model.Vaccine;
+
 public class VaccineOutputDTO {
 
     private String name;
@@ -8,10 +10,10 @@ public class VaccineOutputDTO {
 
     private String validity;
 
-    public VaccineOutputDTO(String name, String date, String validity) {
-        this.name = name;
-        this.date = date;
-        this.validity = validity;
+    public VaccineOutputDTO(Vaccine vaccine) {
+        this.name = vaccine.getName();
+        this.date = vaccine.getDate();
+        this.validity = vaccine.getValidity();
     }
 
     public String getName() {
