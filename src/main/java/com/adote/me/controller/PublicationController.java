@@ -1,11 +1,11 @@
 package com.adote.me.controller;
 
+import com.adote.me.bl.FileStorage;
+import com.adote.me.bl.PublicationService;
 import com.adote.me.dtl.publication.PublicationInputDTO;
 import com.adote.me.dtl.publication.PublicationOutputDTO;
 import com.adote.me.exception.ErrorResponse;
 import com.adote.me.model.Publication;
-import com.adote.me.bl.FileStorage;
-import com.adote.me.bl.PublicationService;
 import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @Tag(name = "publication")
@@ -35,8 +34,12 @@ public class PublicationController {
     private FileStorage storageService;
 
     @GetMapping(value = "/publication/{id}")
-    public PublicationOutputDTO getPublicationById(@PathVariable("id") String id) {
-        return service.getPublicationById(id);
+    public ResponseEntity<?> getPublicationById(@PathVariable("id") String id) {
+        var response = service.getPublicationById(id);
+        if (response == null)
+            return ResponseEntity.status(NOT_FOUND).body("Publicação não existe");
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "/publication")

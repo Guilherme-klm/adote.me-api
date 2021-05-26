@@ -5,7 +5,6 @@ import com.adote.me.dtl.publication.PublicationInputDTO;
 import com.adote.me.dtl.publication.PublicationOutputDTO;
 import com.adote.me.model.Publication;
 import com.adote.me.repository.PublicationRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,8 +31,8 @@ public class PublicationService {
     }
 
     public PublicationOutputDTO getPublicationById(String id) {
-        Publication publication = getById(id).get();
-        return convertClassToDto(publication);
+        var publication = getById(id).orElse(null);
+        return publication != null ? convertClassToDto(publication) : null;
     }
 
     public List<PublicationOutputDTO> findAllByLocalization(String localization, String value) {
