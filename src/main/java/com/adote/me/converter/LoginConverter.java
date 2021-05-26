@@ -5,7 +5,7 @@ import com.adote.me.dtl.login.LoginOutputDTO;
 import com.adote.me.model.Login;
 import com.adote.me.model.UserLogged;
 
-public class LoginConverter extends BaseConverter{
+public class LoginConverter implements BaseConverter {
 
     private LoginInputDTO inputDTO;
 

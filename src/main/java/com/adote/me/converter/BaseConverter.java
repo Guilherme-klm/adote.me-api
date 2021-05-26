@@ -1,8 +1,8 @@
 package com.adote.me.converter;
 
-public abstract class BaseConverter {
+public interface BaseConverter {
 
-     public abstract Object dtoToEntity();
+    Object dtoToEntity();
 
-     public abstract Object entityToDto();
+    Object entityToDto();
 }

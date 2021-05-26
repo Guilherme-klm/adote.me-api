@@ -6,10 +6,9 @@ import com.adote.me.model.Publication;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class PublicationConverter extends BaseConverter {
+public class PublicationConverter implements CustomPublicationConverter {
 
     private PublicationInputDTO publicationInputDTO;
 
@@ -43,6 +42,7 @@ public class PublicationConverter extends BaseConverter {
         return publicationOutput.apply(publication);
     }
 
+    @Override
     public List<PublicationOutputDTO> entityListToDtoList() {
         var publicationsOutputDTO = new ArrayList<PublicationOutputDTO>();
 
