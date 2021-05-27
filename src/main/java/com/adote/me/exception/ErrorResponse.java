@@ -1,6 +1,6 @@
 package com.adote.me.exception;
 
-import static java.lang.String.*;
+import com.google.gson.Gson;
 
 public class ErrorResponse {
 
@@ -11,6 +11,6 @@ public class ErrorResponse {
     }
 
     public String createErrorMessage() {
-        return format("{'message': '%s'}", errorMessage);
+        return new Gson().toJson(this);
     }
 }

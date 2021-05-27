@@ -49,7 +49,7 @@ public class PublicationController {
             var publication = new Gson().fromJson(publicationInputDTO, PublicationInputDTO.class);
             publication.validateFields();
             service.save(publication, image);
-            return ResponseEntity.ok(CREATED);
+            return ResponseEntity.status(CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.status(NOT_ACCEPTABLE).body(new ErrorResponse(e.getMessage()).createErrorMessage());
         }
