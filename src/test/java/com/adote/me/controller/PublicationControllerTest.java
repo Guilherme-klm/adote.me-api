@@ -21,7 +21,7 @@ public class PublicationControllerTest {
     public void setup() {
         fixture = new PublicationFixture();
         baseURI = "https://adote-me-api.herokuapp.com/";
-        image = new File("C:\\images\\6eW2hXNi.jpeg");
+        image = new File("src/test/java/com/adote/me/image/7mQjPISk.jpeg");
         enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
