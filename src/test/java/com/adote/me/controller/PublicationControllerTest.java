@@ -20,8 +20,7 @@ public class PublicationControllerTest {
     @BeforeEach
     public void setup() {
         fixture = new PublicationFixture();
-        baseURI = "http://localhost:8080";
-        port = 8080;
+        baseURI = "https://adote-me-api.herokuapp.com/";
         image = new File("C:\\images\\6eW2hXNi.jpeg");
         enableLoggingOfRequestAndResponseIfValidationFails();
     }
